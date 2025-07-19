@@ -42,25 +42,35 @@ def jump(event):
 
 def left(event):
     global x,xvelocity,aPressed
-    xvelocity=-10
     aPressed=True
+    if dPressed:
+        xvelocity=0
+    elif not dPressed:
+        xvelocity=-10
 def right(event):
-    global x,xvelocity,dPressed
-    xvelocity=10
+    global x,xvelocity,aPressed,dPressed
     dPressed=True
+    if aPressed:
+        xvelocity=0
+    elif not aPressed:
+        xvelocity=10
 def on_key_release(event):
     global xvelocity,aPressed,dPressed
     print(event)
     if event.keysym == "a" :
         aPressed=False
-    elif event.keysym == "d":
-        aPressed=False
-    if aPressed and dPressed:
+        if dPressed:
+            xvelocity=10
+    if event.keysym == "d":
+        dPressed=False
+        if aPressed:
+            xvelocity=-10
+    if (not aPressed and not dPressed):
         xvelocity=0
     
 # mario = canva.create_rectangle((x/2)-tamanho,y-tamanho,x/2,y,fill="red")
 mario = canva.create_rectangle(x-tamanho,0,x,tamanho,fill="red")
-block = canva.create_rectangle(600,400,800,400+tamanho,fill="#00F5E6")
+block = canva.create_rectangle(600,550,800,550+tamanho,fill="#00F5E6")
 canva.pack()
 gravity(mario)
 tela.bind("<KeyRelease>", on_key_release)
